@@ -31,33 +31,81 @@ class Database(object):
 			datas = cursor.fetchall()	
 		except Exception, e:
 			print(e)
+			dbc.close()
 			return "SelectError"
 		#for data in datas:
 		#	print(data)
-		dbc.close
+		dbc.close()
 		return datas
 	def insertName(self,name,photoLink):
+		db = self.connect()
+		cursor = db.cursor()
 		try:
-			db = self.connect()
-			cursor = db.cursor()
 			sql = '''insert into name(n_name,n_photoLink) values(\"%s\",\"%s\")'''%(name,photoLink)
 			cursor.execute(sql)
 			db.commit()
+			sql = '''select n_id from name where n_name = \"%s\"'''%(name)
+			cursor.execute(sql)
+			data = cursor.fetchone()
+			db.close()
+			return data
 		except Exception, e:
-			print(e)
-    		db.rollback()
-    		return "InsertError"
-		db.close
+			if e[0] == 1062: #means Duplicate entry
+				sql = '''select n_id from name where n_name = \"%s\"'''%(name)
+				cursor.execute(sql)
+				data = cursor.fetchone()
+				db.close()
+				return data
+			else:
+				print(e)
+    			db.rollback()
+    			db.close()
+    			return "InsertError"
+    	
 	def insertEpisode(self,n_id,e_season,e_espisode,e_name,e_onAir,e_descirption):
 		db = self.connect()
 		cursor = db.cursor()
 		sql = '''insert into episode(n_id,e_season,e_episode,e_name,e_onAir,e_description) values(\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\")'''%(n_id,e_season,e_espisode,e_name,e_onAir,e_descirption)
-		print(sql)
+		try:
+			cursor.execute(sql)
+			db.commit()
+		except Exception, e:
+			if e[0] == 45001: #means tri_protect
+				db.close()
+				return "RecordProtect"
+			else:
+				print(e)
+				db.rollback()
+				db.close()
+				return "InsertError"
+		db.close()
+		return "ok"
+	def getLastDay(self):
+		db = self.connect()
+		cursor = db.cursor()
+		sql = "select c_value from config where c_name = \"lastDay\" limit 1"
+		try:
+			cursor.execute(sql)
+			data = cursor.fetchone()
+		except Exception, e:
+			print(e)
+			db.close()
+			return "SelectError"
+		db.close()
+		return data
+	def updateLastDay(self,ld):
+		db = self.connect()
+		cursor = db.cursor()
+		sql = "update config set c_value = \"%s\" where c_name = \"lastDay\""%(ld)
 		try:
 			cursor.execute(sql)
 			db.commit()
 		except Exception, e:
 			print(e)
 			db.rollback()
-			return "InsertError"
+			db.close()
+			return "UpdateError"
 		db.close()
+		return True
+
+		
