@@ -4,6 +4,9 @@ some notes:
 	0.2 python BeautifulSoap4: sudo apt-get install python-bs4
 	0.3 python MySQLdb: sudo apt-get install python-mysqldb
 	0.4 a Mysql database named as 'tcdb', then we put the tcdb.sql into the database(trigger included).
+	0.5 set timezone and sync the time: sudo ntpdate s1b.time.edu.cn
+										sudo hwclock --systohc
+	0.6 in database tcdb, a record must be inserted into table config: insert into config (c_name,c_value) values ("lastDay","30-04-2015");
 1.the first step of this script is to get whole HTML page from a specfic page and get some info:
 	1.1 The organization of the json is like below:
 		{"date":[{"season":"","episode":"","name":""},{"seasonAnother":"","episodeAnother":"","nameAnother":""},...],"dateAnother":[...],...}

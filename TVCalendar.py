@@ -18,7 +18,8 @@ class TVCalendar:
         self.password = password
         self.data = {}
 
-    def getData(self):
+    def getData(self,month = '',year = ''):
+        #month should be like m-yyyy,the month shouldn't have 0
         cookie = cookielib.CookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie))
         postdata=urllib.urlencode({
@@ -26,8 +27,12 @@ class TVCalendar:
             'password': self.password, 
             'sub_login':'Account Login'
         })
+        if (month != '') and (year != ''):
+            strPara = str(month) + '-' + str(year)
+        else:
+            strPara = ''
         req = urllib2.Request(
-            url = 'http://www.pogdesign.co.uk/cat/', 
+            url = 'http://www.pogdesign.co.uk/cat/'+ strPara, 
             data = postdata
         )
         htmlData = ""
@@ -55,11 +60,10 @@ class TVCalendar:
                 return json.dumps(self.data)
             else :
                 return None
-    def toString(self):
-        if self.data:
+    def toString(self,month = '',year = ''):
+        self.data = {}
+        if self.getData(month,year):
             return self.data
         else:
-            if self.getData():
-                return self.data
-            else:
-                return None
+            return None
+#original author: Gaoming

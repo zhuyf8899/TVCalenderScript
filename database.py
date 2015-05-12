@@ -5,21 +5,24 @@ import MySQLdb
 
 #conn = MySQLdb.connect(host="localhost",user="root",passwd="123123",db="qiwsirtest",port=3306,charset="utf8")
 class Database(object):
-	def __init__(h,u,p,d):
+	def __init__(h,u,p,d,fileHandler):
 		self.host = h
 		self.user = u
 		self.passwd = p
 		self.db = d
-	def __init__(self):
+		self.fileHandler = fileHandler
+	def __init__(self,fileHandler):
 		self.host = "localhost"
 		self.user = "root"
 		self.passwd = "ubuntu1404"
 		self.db = "tcdb"
+		self.fileHandler = fileHandler
 	def connect(self):
 		try:
 			conn = MySQLdb.connect(host=self.host,user=self.user,passwd=self.passwd,db=self.db,charset='utf8')
 		except Exception, e:
 			print(e)
+			self.fileHandler.write(str(e))
 			return "connectError"
 		return conn
 	def getAllNames(self):
@@ -31,6 +34,7 @@ class Database(object):
 			datas = cursor.fetchall()	
 		except Exception, e:
 			print(e)
+			self.fileHandler.write(str(e))
 			dbc.close()
 			return "SelectError"
 		#for data in datas:
@@ -44,6 +48,7 @@ class Database(object):
 			sql = '''insert into name(n_name,n_photoLink) values(\"%s\",\"%s\")'''%(name,photoLink)
 			cursor.execute(sql)
 			db.commit()
+			self.fileHandler.write('''NOTICE: Insert a name:%s'''%(name))
 			sql = '''select n_id from name where n_name = \"%s\"'''%(name)
 			cursor.execute(sql)
 			data = cursor.fetchone()
@@ -58,6 +63,7 @@ class Database(object):
 				return data
 			else:
 				print(e)
+				self.fileHandler.write(str(e))
     			db.rollback()
     			db.close()
     			return "InsertError"
@@ -75,6 +81,7 @@ class Database(object):
 				return "RecordProtect"
 			else:
 				print(e)
+				self.fileHandler.write(str(e))
 				db.rollback()
 				db.close()
 				return "InsertError"
@@ -89,6 +96,7 @@ class Database(object):
 			data = cursor.fetchone()
 		except Exception, e:
 			print(e)
+			self.fileHandler.write(str(e))
 			db.close()
 			return "SelectError"
 		db.close()
@@ -102,10 +110,11 @@ class Database(object):
 			db.commit()
 		except Exception, e:
 			print(e)
+			self.fileHandler.write(str(e))
 			db.rollback()
 			db.close()
 			return "UpdateError"
 		db.close()
 		return True
-
+#Author:zhuyifan on 11-5-2015 in Beijing
 		
