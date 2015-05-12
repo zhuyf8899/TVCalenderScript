@@ -1,4 +1,4 @@
-some notes:
+some notes wroted by zhuyifan here:
 0.What we need is following:
 	0.1 LAMP:ubuntu1404,Apache,Mysql,php
 	0.2 python BeautifulSoap4: sudo apt-get install python-bs4

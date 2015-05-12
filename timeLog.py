@@ -21,4 +21,5 @@ class Time(object):
 		return True
 	def getDate(self):
 		return time.strftime("%Y-%m-%d",time.localtime(time.time()))
+#author :zhuyifan
 
