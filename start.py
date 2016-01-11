@@ -10,10 +10,13 @@ while True:
 	currentMonth = t.getMonth()
 	currentYear = t.getYear()
 	if currentDay == 1:
+	#if True:
 		fileHandle = open ( '''logs/log%s.log'''%(t.getDate()), 'w' )  
-		dhc = DataHandleController(currentDay,currentMonth,currentYear)
+		dhc = DataHandleController(currentDay,currentMonth,currentYear,fileHandle)
 		dhc.startHandle()
 		fileHandle.close()
+		print '''today\'s job finished, sleep for another day.'''
+		t.sleepDay(1)
 	else:
 		if currentMonth < 10:
 			fileHandle = open ( '''logs/log%s-0%s-01.log'''%(currentYear,currentMonth), 'a' )

@@ -14,7 +14,7 @@ class Database(object):
 	def __init__(self,fileHandler):
 		self.host = "localhost"
 		self.user = "root"
-		self.passwd = "ubuntu1404"
+		self.passwd = "zyf!@#TX"
 		self.db = "tcdb"
 		self.fileHandler = fileHandler
 	def connect(self):
