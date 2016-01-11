@@ -11,11 +11,11 @@ class Database(object):
 		self.passwd = p
 		self.db = d
 		self.fileHandler = fileHandler
-	def __init__(self,fileHandler):
-		self.host = "localhost"
-		self.user = "root"
-		self.passwd = "zyf!@#TX"
-		self.db = "tcdb"
+	def __init__(self,fileHandler,config):
+		self.host = config.dataBaseHost
+		self.user = config.dataBaseUser
+		self.passwd = config.dataBasePwd
+		self.db = config.dataBasedb
 		self.fileHandler = fileHandler
 	def connect(self):
 		try:

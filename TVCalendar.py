@@ -7,13 +7,14 @@ import cookielib
 import re
 from bs4 import BeautifulSoup
 import json
-
 import sys
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 class TVCalendar:
-    def __init__(self, username = '', password = ''):
+    def __init__(self,config, username = '', password = ''):
+        self.config = config
         self.username = username
         self.password = password
         self.data = {}
@@ -32,7 +33,7 @@ class TVCalendar:
         else:
             strPara = ''
         req = urllib2.Request(
-            url = 'http://www.pogdesign.co.uk/cat/'+ strPara, 
+            url = self.config.url + strPara, #从config中读取url
             data = postdata
         )
         htmlData = ""

@@ -2,7 +2,9 @@
 # -*- coding: UTF-8 -*-
 from timeLog import Time
 from dataHandleController import DataHandleController
+from config import Config
 t = Time()
+config = Config()
 
 while True:
 	#the 3 vars following is a int.
@@ -12,7 +14,7 @@ while True:
 	if currentDay == 1:
 	#if True:
 		fileHandle = open ( '''logs/log%s.log'''%(t.getDate()), 'w' )  
-		dhc = DataHandleController(currentDay,currentMonth,currentYear,fileHandle)
+		dhc = DataHandleController(currentDay,currentMonth,currentYear,fileHandle,config)
 		dhc.startHandle()
 		fileHandle.close()
 		print '''today\'s job finished, sleep for another day.'''

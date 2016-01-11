@@ -19,4 +19,5 @@ some notes wroted by zhuyifan here:
 		1.3.1 TVCalendar -- get data from website http://www.pogdesign.co.uk/cat/. However this module works well without checking any mistakes, I will update ASAP(Of course this module is finished by Gaoming, not me.)
 		1.3.2 Database -- make data store into database correctly.
 		1.3.3 Main test -- we start it to do all the work.
-	1.4 Before we start,we should confirm that a config item ought to be set in 
+	1.4 Before we start,we should confirm that a config item ought to be set in:
+	    INSERT INTO `tcdb`.`config` (`c_id`, `c_name`, `c_value`) VALUES (NULL, 'lastday', {the date of yesterday}); 

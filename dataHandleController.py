@@ -9,12 +9,13 @@ import re
 import time
 
 class DataHandleController(object):
-	def __init__(self, day, month, year,filehandler):
+	def __init__(self, day, month, year,filehandler,config):
 		#super(dataHandleController, self).__init__()
 		self.day = day
 		self.month = month
 		self.year = year
 		self.filehandler = filehandler
+		self.config = config
 	def startHandle(self):
 		reload(sys)
 		sys.setdefaultencoding('utf-8') 
@@ -24,7 +25,7 @@ class DataHandleController(object):
 		self.filehandler.write('NOTICE:Config loaded.\n')
 		self.filehandler.write('NOTICE:Start getting data from webside...\n')
 
-		tc = TVCalendar()
+		tc = TVCalendar(self.config)
 		tc_data1 = tc.toString()
 		tc_data2 = {}
 		if self.month == 12:
@@ -34,7 +35,7 @@ class DataHandleController(object):
 		#tc_data= dict(tc_data1, **tc_data2)
 		tc_data = [tc_data1,tc_data2]
 
-		db = Database(self.filehandler)
+		db = Database(self.filehandler,self.config)
 
 		print('NOTICE:Data gathered successfully.')
 		print('NOTICE:Start formatting data...')
@@ -130,7 +131,8 @@ class DataHandleController(object):
 					continue
 
 				for aDay in value:
-					n_id_rec = db.insertName(aDay['name'],'')
+					imageURL = self.config.url + 'imgs/sibig/' + aDay['name'] + '.jpg'
+					n_id_rec = db.insertName(aDay['name'],imageURL)
 					dateThisDay = key.split('-')
 					dateString = '''%s-%s-%s 00:00:00'''%(dateThisDay[2],dateThisDay[1],dateThisDay[0])
 					if n_id_rec != "InsertError":
