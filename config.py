@@ -8,10 +8,10 @@ class Config(object):
 	dataBaseHost = "localhost"
 
 	#the database username
-	dataBaseUser = "root"
+	dataBaseUser = "username"
 
 	#the password of the username metioned above
-	dataBasePwd = "zyf!@#TX"
+	dataBasePwd = "password"
 
 	#default table
 	dataBasedb = "tcdb"
