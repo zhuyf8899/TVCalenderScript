@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2015-05-11 06:39:35
--- 服务器版本: 5.5.43-0ubuntu0.14.04.1
--- PHP 版本: 5.5.9-1ubuntu4.9
+-- 生成日期: 2016-01-13 10:51:49
+-- 服务器版本: 5.5.46-0ubuntu0.14.04.2
+-- PHP 版本: 5.5.9-1ubuntu4.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -25,18 +25,22 @@ SET time_zone = "+00:00";
 --
 -- 表的结构 `config`
 --
+-- 创建时间: 2016-01-11 06:33:36
+--
 
 CREATE TABLE IF NOT EXISTS `config` (
   `c_id` int(100) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `c_name` varchar(255) NOT NULL COMMENT 'item name',
   `c_value` mediumtext NOT NULL,
   PRIMARY KEY (`c_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
 --
 -- 表的结构 `episode`
+--
+-- 创建时间: 2016-01-13 02:48:09
 --
 
 CREATE TABLE IF NOT EXISTS `episode` (
@@ -45,10 +49,17 @@ CREATE TABLE IF NOT EXISTS `episode` (
   `e_season` int(10) NOT NULL,
   `e_episode` int(10) NOT NULL,
   `e_name` varchar(255) DEFAULT NULL,
-  `e_onAir` datetime DEFAULT NULL,
+  `e_onAir` date DEFAULT NULL,
   `e_description` text,
-  PRIMARY KEY (`e_id`,`n_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+  PRIMARY KEY (`e_id`,`n_id`),
+  KEY `FK_episode_TO_name` (`n_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1190 ;
+
+--
+-- 表的关联 `episode`:
+--   `n_id`
+--       `name` -> `n_id`
+--
 
 --
 -- 触发器 `episode`
@@ -71,6 +82,8 @@ DELIMITER ;
 --
 -- 表的结构 `name`
 --
+-- 创建时间: 2016-01-11 06:33:36
+--
 
 CREATE TABLE IF NOT EXISTS `name` (
   `n_id` int(8) NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -78,7 +91,74 @@ CREATE TABLE IF NOT EXISTS `name` (
   `n_photoLink` varchar(4096) DEFAULT NULL COMMENT 'a photo link when possible',
   PRIMARY KEY (`n_id`),
   UNIQUE KEY `n_name` (`n_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1190 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `nameInfo`
+--
+-- 创建时间: 2016-01-13 02:48:59
+--
+
+CREATE TABLE IF NOT EXISTS `nameInfo` (
+  `n_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '与n_id一致的主键',
+  `name_chinese` varchar(255) DEFAULT NULL COMMENT '剧集中文翻译',
+  `name_description` text COMMENT '剧情介绍',
+  `name_year` year(4) DEFAULT NULL COMMENT '上映年（最早）',
+  PRIMARY KEY (`n_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- 表的关联 `nameInfo`:
+--   `n_id`
+--       `name` -> `n_id`
+--
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `season`
+--
+-- 创建时间: 2016-01-13 02:49:26
+--
+
+CREATE TABLE IF NOT EXISTS `season` (
+  `n_id` int(11) NOT NULL COMMENT '与n_id一致的主键',
+  `season` int(11) NOT NULL COMMENT '季',
+  `s_description` text COMMENT '季介绍',
+  `s_year` year(4) DEFAULT NULL COMMENT '上映年',
+  `s_photolink` varchar(2083) DEFAULT NULL COMMENT '图片链接',
+  PRIMARY KEY (`n_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='每季信息';
+
+--
+-- 表的关联 `season`:
+--   `n_id`
+--       `name` -> `n_id`
+--
+
+--
+-- 限制导出的表
+--
+
+--
+-- 限制表 `episode`
+--
+ALTER TABLE `episode`
+  ADD CONSTRAINT `FK_episode_TO_name` FOREIGN KEY (`n_id`) REFERENCES `name` (`n_id`);
+
+--
+-- 限制表 `nameInfo`
+--
+ALTER TABLE `nameInfo`
+  ADD CONSTRAINT `FK_nameInfo_TO_name` FOREIGN KEY (`n_id`) REFERENCES `name` (`n_id`);
+
+--
+-- 限制表 `season`
+--
+ALTER TABLE `season`
+  ADD CONSTRAINT `FK_season_TO_name` FOREIGN KEY (`n_id`) REFERENCES `name` (`n_id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
