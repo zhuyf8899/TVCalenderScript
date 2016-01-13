@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2016-01-13 10:51:49
+-- 生成日期: 2016-01-13 11:07:49
 -- 服务器版本: 5.5.46-0ubuntu0.14.04.2
 -- PHP 版本: 5.5.9-1ubuntu4.14
 
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `nameInfo` (
 --
 -- 表的结构 `season`
 --
--- 创建时间: 2016-01-13 02:49:26
+-- 创建时间: 2016-01-13 03:07:21
 --
 
 CREATE TABLE IF NOT EXISTS `season` (
@@ -128,15 +128,9 @@ CREATE TABLE IF NOT EXISTS `season` (
   `season` int(11) NOT NULL COMMENT '季',
   `s_description` text COMMENT '季介绍',
   `s_year` year(4) DEFAULT NULL COMMENT '上映年',
-  `s_photolink` varchar(2083) DEFAULT NULL COMMENT '图片链接',
-  PRIMARY KEY (`n_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='每季信息';
-
---
--- 表的关联 `season`:
---   `n_id`
---       `name` -> `n_id`
---
+  `s_photolink` varchar(2038) DEFAULT NULL,
+  PRIMARY KEY (`n_id`,`season`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- 限制导出的表
@@ -153,12 +147,6 @@ ALTER TABLE `episode`
 --
 ALTER TABLE `nameInfo`
   ADD CONSTRAINT `FK_nameInfo_TO_name` FOREIGN KEY (`n_id`) REFERENCES `name` (`n_id`);
-
---
--- 限制表 `season`
---
-ALTER TABLE `season`
-  ADD CONSTRAINT `FK_season_TO_name` FOREIGN KEY (`n_id`) REFERENCES `name` (`n_id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
